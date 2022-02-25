@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: http-server-config-map
+  labels:
+    app: http-server
+data:
+  VERSION: V1
