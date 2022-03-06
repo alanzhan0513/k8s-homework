@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: http-load-balance
+spec:
+  allocateLoadBalancerNodePorts: true
+  clusterIP: 10.104.174.231
+  clusterIPs:
+  - 10.104.174.231
+  externalIPs:
+  - 192.168.83.130
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - nodePort: 32403
+    port: 8080
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: http-server
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer: {}
