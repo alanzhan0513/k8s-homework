@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: http-server
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: http-server
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: http-server
+    spec:
+      containers:
+      - name: http-server
+        image: alanzhan/k8shomework:1.0.2
+        ports:
+        - name: httpserverport
+          containerPort: 80
+          protocol: TCP
+        env:
+        - name: VERSION
+          valueFrom:
+            configMapKeyRef:
+              name: http-server-config-map
+              key: VERSION
+        resources:
+          requests:
+            cpu: 1
+            memory: 512Mi
+          limits:
+            cpu: 2
+            memory: 1024Mi
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: httpserverport
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      terminationGracePeriodSeconds: 10
